@@ -1,20 +1,13 @@
-import {
-  Button,
-  ConfigProvider,
-  Form,
-  Input,
-} from "antd";
+import { Button, ConfigProvider, Form, Input } from "antd";
 import { useOrder } from "../../store/order";
-import { useNavigate } from "react-router";
 
-function ShipperForm() {
-  const navigate = useNavigate();
 
+function ShipperForm({ handleClose }) {
   const setAdd = useOrder((state) => state.setAdd);
 
   const onFinish = (values) => {
     setAdd(values);
-    navigate('/my-orders');
+    handleClose();
   };
 
   return (
@@ -26,13 +19,7 @@ function ShipperForm() {
           },
         }}
       >
-        <Form
-          name="basic"
-          className="border rounded-lg shadow-xl sm:w-[480px] pt-10 pb-6 px-6"
-          size="large"
-          onFinish={onFinish}
-          autoComplete="off"
-        >
+        <Form name="basic" size="large" onFinish={onFinish} autoComplete="off">
           <h1 className="text-center text-3xl text-primary mb-10 ">
             &lt; Logo Here &frasl; &gt;{" "}
           </h1>
