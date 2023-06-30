@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Checkbox,
@@ -9,7 +9,7 @@ import {
   Segmented,
   Upload,
 } from "antd";
-import { UploadOutlined, InboxOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useUserAuth }  from "../store/userAuth.js";
 const { Option } = Select;
@@ -20,7 +20,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const onFinish = (values) => {
     setUser({role:role, rate:3 ,...values});
-    navigate("/profile");
+    navigate("/");
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -80,7 +80,7 @@ function LoginPage() {
             name="nameSurname"
             rules={[
               {
-                required: true,
+                // required: true,
                 min: 3,
                 message: "Please input your First and Last name!",
               },
@@ -97,7 +97,7 @@ function LoginPage() {
                 message: "The input is not valid E-mail!",
               },
               {
-                required: true,
+                // required: true,
                 message: "Please input your E-mail!",
               },
             ]}
@@ -109,7 +109,7 @@ function LoginPage() {
             name="phone"
             rules={[
               {
-                required: true,
+                // required: true,
                 message: "Please input your phone number!",
               },
             ]}
@@ -121,7 +121,7 @@ function LoginPage() {
             name="nameOfCompany"
             rules={[
               {
-                required: true,
+                // required: true,
                 min: 3,
                 message: "Please input company name!",
               },
@@ -134,7 +134,7 @@ function LoginPage() {
             name="mcDotId"
             rules={[
               {
-                required: true,
+                // required: true,
                 min: 3,
                 message: "Please input MC/DOT personal number!",
               },
@@ -174,7 +174,7 @@ function LoginPage() {
             name="username"
             rules={[
               {
-                required: true,
+                // required: true,
                 min: 3,
                 message: "Please create your username longer!",
               },
@@ -187,7 +187,7 @@ function LoginPage() {
             name="password"
             rules={[
               {
-                required: true,
+                // required: true,
                 min: 3,
                 message: "Please create your password longer!",
               },
