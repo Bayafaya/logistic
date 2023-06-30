@@ -3,7 +3,7 @@ import { Layout, Menu, theme } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router';
 import LoginPage from './pages/LoginPage.jsx';
-import ProfilePage from './pages/ProfilePage.jsx';
+import ProfilePage from './pages/Profile/ProfilePage.jsx';
 import MyOrders from './pages/MyOrders.jsx';
 import AllOrders from './pages/AllOrders.jsx';
 import ShipperForm from './components/ShipperForm.jsx';
