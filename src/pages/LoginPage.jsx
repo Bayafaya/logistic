@@ -11,12 +11,15 @@ import {
 } from "antd";
 import { UploadOutlined, InboxOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useUserAuth }  from "../store/userAuth.js";
 const { Option } = Select;
 
 function LoginPage() {
+  const [role, setRole] = useState("Shipper");
+  const setUser = useUserAuth(state=>state.setUser)
   const navigate = useNavigate();
   const onFinish = (values) => {
-    console.log("Success:", values);
+    setUser({role:role, rate:3 ,...values});
     navigate("/profile");
   };
   const onFinishFailed = (errorInfo) => {
@@ -35,7 +38,7 @@ function LoginPage() {
     </Form.Item>
   );
 
-  const [role, setRole] = useState("Shipper");
+
   return (
     <div className="h-screen w-screen grid place-items-center">
       <ConfigProvider
