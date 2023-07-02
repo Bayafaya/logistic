@@ -11,21 +11,31 @@ function ProfileTab() {
   const [form] = Form.useForm();
 
   const prefixSelector = (
-    <Select defaultValue="+996">
+  <Form.Item name="prefix" noStyle>
+    <Select
+      style={{
+        width: 90,
+      }}
+    >
       <Option value="+996">+996</Option>
       <Option value="+7">+7</Option>
     </Select>
+  </Form.Item>
   );
+  
   useEffect(()=>{
     form.setFieldsValue(user)
+    console.log(user);
   },[user])
+
   const onFinish = (values) => {
     setUser({...values});
-    console.log(values);
   };
+
   const onFinishFailed = (errorInfo) => {
     setDisabledToEdit(false);
   };
+
   return (
     <div>
       <Form 

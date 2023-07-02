@@ -1,4 +1,4 @@
-import { useOrder } from '../../store/order.js';
+import { useOrder } from '../store/order.js';
 import OrderCard from '../components/OrderCard.jsx';
 
 function AllOrders() {

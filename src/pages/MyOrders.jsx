@@ -1,15 +1,15 @@
 import { FloatButton, Modal } from "antd";
-import { useOrder } from "../../store/order.js";
+import { useOrder } from "../store/order.js";
 import OrderCard from "../components/OrderCard.jsx";
 import { useNavigate } from "react-router";
 import { PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ShipperForm from "../components/ShipperForm.jsx";
 
 function MyOrders() {
   const navigate = useNavigate();
   const [modalIOpen, setModalIsOpen] = useState(false);
-  const orders = useOrder((state) => state.orders);
+  const {orders,fetchOrders} = useOrder((state) =>({orders:state.orders,fetchOrders:state.fetchOrders}));
 
   const handleAddClick = () => {
     setModalIsOpen(true);
@@ -17,6 +17,9 @@ function MyOrders() {
   const handleClose =()=>{
     setModalIsOpen(false)
   }
+  useEffect(()=>{
+    fetchOrders()
+  },[])
 
   return (
     <div>
