@@ -2,10 +2,13 @@ import { AppstoreOutlined, UserOutlined } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
 import React, { useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router";
-import LoginPage from "./pages/LoginPage.jsx";
+import SignupPage from "./pages/SignupPage.jsx";
 import ProfilePage from "./pages/Profile/ProfilePage.jsx";
 import MyOrders from "./pages/MyOrders.jsx";
 import AllOrders from "./pages/AllOrders.jsx";
+import SigninPage from "./pages/SignInPage.jsx";
+import Map from "./pages/map/Map.jsx";
+import { useUserAuth } from "./store/userAuth.js";
 
 
 const PAGES = [
@@ -24,13 +27,23 @@ const PAGES = [
     icon: React.createElement(AppstoreOutlined),
     label: "All orders",
   },
+  {
+    key: "/map",
+    icon: React.createElement(AppstoreOutlined),
+    label: "Map",
+  },
+  {
+    key: "logOut",
+    icon: React.createElement(AppstoreOutlined),
+    label: "Log out",
+  },
 ];
 
 const { Content, Sider } = Layout;
-
 const AppLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const {user,logout} = useUserAuth(state=>({user:state.user,logout:state.logout}))
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -42,8 +55,20 @@ const AppLayout = () => {
     setCurrentPage(location.pathname);
   }, [location.pathname]);
 
+  useEffect(()=>{
+    if(user.accessToken){
+      navigate('/profile')
+    }else{
+      navigate('/signin')
+    }
+  },[])
+
   const handleMenuSelect = (event) => {
     navigate(event.key);
+    if(event.key === 'logOut'){
+      logout();
+      navigate('/signin');
+    }
   };
 
   return (
@@ -94,7 +119,9 @@ const AppLayout = () => {
 const App = () => {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage/>} />
+      <Route path="/signin" element={<SigninPage />} />
+      <Route path="/map" element={<Map />} />
       <Route path="/*" element={<AppLayout />} />
     </Routes>
   );

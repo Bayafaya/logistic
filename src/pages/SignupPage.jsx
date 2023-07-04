@@ -12,14 +12,15 @@ import {
 import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useUserAuth }  from "../store/userAuth.js";
+import axios from "axios";
 const { Option } = Select;
 
-function LoginPage() {
-  const [role, setRole] = useState("Shipper");
-  const setUser = useUserAuth(state=>state.setUser)
+function SignupPage() {
+  const [role, setRole] = useState("shipper");
+  const {setUser,signUp} = useUserAuth(state=>({setUser:state.setUser,signUp:state.signUp}))
   const navigate = useNavigate();
-  const onFinish = (values) => {
-    setUser({role:role, rate:3 ,...values});
+  const onFinish = async(values) => {
+    await signUp({...values, role})
     navigate("/");
   };
   const onFinishFailed = (errorInfo) => {
@@ -68,7 +69,7 @@ function LoginPage() {
             <Segmented
               value={role}
               onChange={(value) => setRole(value)}
-              options={["Shipper", "Cargo Company", "Driver"]}
+              options={[{value:"shipper",label:'Shipper'},{value:"cargoCompany",label:'Cargo Company'}, {value:"driver",label:'Driver'}]}
               block
             />
             <span className="text-secondary text-sm">
@@ -216,4 +217,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default SignupPage;

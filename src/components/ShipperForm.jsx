@@ -1,23 +1,14 @@
 import { Button, ConfigProvider, Form, Input } from "antd";
 import { useOrder } from "../store/order";
-import axios from "axios";
+import { useUserAuth } from "../store/userAuth";
 
 
 function ShipperForm({ handleClose }) {
-  const {setAdd,postNewOrder} = useOrder((state) =>({setAdd:state.setAdd,postNewOrder:state.postNewOrder}));
+  const user = useUserAuth(state=>state.user)
+  const postNewOrder= useOrder((state) =>state.postNewOrder);
 
   const onFinish = async (values) => {
-    // setAdd(values);
-    // postNewOrder(values)
-    // handleClose();
-     
-
-      await axios.post(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/order`,values,{ headers:{
-        'Content-Type': 'application/json',
-        'Accept': '*/*'
-      }})
-     
-   
+    await postNewOrder(values, user.accessToken)
   };
 
   return (

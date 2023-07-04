@@ -1,0 +1,1 @@
+export const API = 'https://us-central1-test-c36b4.cloudfunctions.net/myFunction';

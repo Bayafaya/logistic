@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage  } from 'zustand/middleware'
 import axios from 'axios'
 
+
 export const useOrder = create(persist((set) => ({
   orders: [],
   loading:false,
@@ -21,12 +22,15 @@ export const useOrder = create(persist((set) => ({
       set({loading: false})
     }
   },
-  postNewOrder: async(data)=>{
+  postNewOrder: async(data,token)=>{
+
     try{
      const response = await axios.post(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/order`,data,{headers:{
-      'Content-Type':'application/json'
+      'Content-Type':'application/json',
+      'Authorization': `Bearer ${token}`
      }})
       set(state=>({orders: [...state.orders,data]}))
+   
     }
     catch(error){
       set({errorMessage:error})
