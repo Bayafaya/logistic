@@ -25,7 +25,7 @@ function ProfileTab() {
   
   useEffect(()=>{
     form.setFieldsValue(user)
-    console.log(user);
+
   },[user])
 
   const onFinish = (values) => {
