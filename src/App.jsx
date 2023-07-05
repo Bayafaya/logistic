@@ -24,11 +24,6 @@ const SHIPPER_PAGES = [
     label: "My orders",
   },
   {
-    key: "/all-orders",
-    icon: React.createElement(AppstoreOutlined),
-    label: "All orders",
-  },
-  {
     key: "/map",
     icon: React.createElement(AppstoreOutlined),
     label: "Map",
@@ -48,7 +43,7 @@ const DRIVER_PAGES = [
   {
     key: "/all-orders",
     icon: React.createElement(AppstoreOutlined),
-    label: "All orders",
+    label: "Orders",
   },
   {
     key: "/map",

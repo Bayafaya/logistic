@@ -3,6 +3,7 @@ import axios from 'axios'
 
 export const useDriver = create((set) => ({
   driver: {},
+  recomendations: [],
   loading:false,
   errorMessage: '',
   fetchDriver: async(id)=>{
@@ -44,5 +45,13 @@ export const useDriver = create((set) => ({
       console.error(error)
       throw error;
     }
+  },
+  getRecomendations: async(token)=>{
+    const response = await axios.get(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/driver/recomendations`, {
+      headers: {
+        'authorization': `Bearer ${token}`
+      }
+    })
+    set({ recomendations: response.data })
   },
 }))

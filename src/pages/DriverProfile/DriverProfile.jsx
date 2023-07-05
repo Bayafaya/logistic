@@ -61,7 +61,7 @@ function DriverProfile() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-10 place-items-start">
           <div className="border-b lg:border-l py-6 lg:py-4 w-full px-2 lg:px-4 lg:border-b-transparent space-y-1">
-            <Description>Current location</Description>
+            <Description>Entry point</Description>
             <Form.Item 
                 name="currentLocation"
             >
