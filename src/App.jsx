@@ -10,6 +10,7 @@ import SigninPage from "./pages/SignInPage.jsx";
 import Map from "./pages/map/Map.jsx";
 import { useUserAuth } from "./store/userAuth.js";
 import DriverProfile from "./pages/DriverProfile/DriverProfile.jsx";
+import AllDrivers from "./pages/AllDrivers/AllDrivers.jsx";
 
 
 const SHIPPER_PAGES = [
@@ -22,6 +23,11 @@ const SHIPPER_PAGES = [
     key: "/my-orders",
     icon: React.createElement(AppstoreOutlined),
     label: "My orders",
+  },
+  {
+    key: "/drivers",
+    icon: React.createElement(AppstoreOutlined),
+    label: "Drivers",
   },
   {
     key: "/map",
@@ -133,6 +139,7 @@ const AppLayout = () => {
             <Route path="/driver-profile" element={<DriverProfile />} />
             <Route path="/my-orders" element={<MyOrders />} /> 
             <Route path="/all-orders" element={<AllOrders />} />
+            <Route path="/drivers" element={<AllDrivers />} />
           </Routes>
         </Content>
       </Layout>
