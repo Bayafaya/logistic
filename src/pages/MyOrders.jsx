@@ -26,7 +26,7 @@ function MyOrders() {
 
   useEffect(()=>{
     fetchOrders({ author: user._id });
-    getRecomendations();
+    getRecomendations(user.accessToken);
   }, [])
 
   return (

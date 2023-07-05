@@ -35,8 +35,12 @@ export const useOrder = create((set) => ({
       throw error;
     }
   },
-  getRecomendations: async()=>{
-    const response = await axios.get(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/order/recomendations`)
+  getRecomendations: async(token)=>{
+    const response = await axios.get(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/order/recomendations`, {
+      headers: {
+        'authorization': `Bearer ${token}`
+      }
+    })
     set({ recomendations: response.data })
   },
 }))

@@ -9,7 +9,7 @@ import SigninPage from "./pages/SignInPage.jsx";
 import { useUserAuth } from "./store/userAuth.js";
 import DriverProfile from "./pages/DriverProfile/DriverProfile.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
-
+import AllDrivers from "./pages/AllDrivers/AllDrivers.jsx";
 
 const SHIPPER_PAGES = [
   {
@@ -23,9 +23,9 @@ const SHIPPER_PAGES = [
     label: "My orders",
   },
   {
-    key: "/all-orders",
+    key: "/drivers",
     icon: React.createElement(AppstoreOutlined),
-    label: "All orders",
+    label: "Drivers",
   },
   {
     key: "logOut",
@@ -42,7 +42,7 @@ const DRIVER_PAGES = [
   {
     key: "/all-orders",
     icon: React.createElement(AppstoreOutlined),
-    label: "All orders",
+    label: "Orders",
   },
   {
     key: "logOut",
@@ -127,6 +127,7 @@ const AppLayout = () => {
             <Route path="/driver-profile" element={<DriverProfile />} />
             <Route path="/my-orders" element={<MyOrders />} /> 
             <Route path="/all-orders" element={<AllOrders />} />
+            <Route path="/drivers" element={<AllDrivers />} />
           </Routes>
         </Content>
       </Layout>

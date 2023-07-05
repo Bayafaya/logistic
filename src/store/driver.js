@@ -3,13 +3,33 @@ import axios from 'axios'
 
 export const useDriver = create((set) => ({
   driver: {},
+  drivers: [],
+  recomendations: [],
   loading:false,
   errorMessage: '',
   fetchDriver: async(id)=>{
     set({loading: true})
     try{
      const response = await axios.get(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/driver/list?author=${id}`)
-      set({driver: response.data[0]})
+      set({
+        driver: response.data[0],
+      })
+    }
+    catch(error){
+      set({errorMessage:error})
+      console.error(error)
+    }
+    finally{
+      set({loading: false})
+    }
+  },
+  fetchDrivers: async()=>{
+    set({loading: true})
+    try{
+     const response = await axios.get(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/driver/list`)
+      set({
+        drivers: response.data,
+      })
     }
     catch(error){
       set({errorMessage:error})
@@ -44,5 +64,13 @@ export const useDriver = create((set) => ({
       console.error(error)
       throw error;
     }
+  },
+  getRecomendations: async(token)=>{
+    const response = await axios.get(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/driver/recomendations`, {
+      headers: {
+        'authorization': `Bearer ${token}`
+      }
+    })
+    set({ recomendations: response.data })
   },
 }))
