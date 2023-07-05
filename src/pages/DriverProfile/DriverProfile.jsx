@@ -4,6 +4,7 @@ import { useUserAuth } from "../../store/userAuth";
 import { Avatar, Button, Input, Select, Form,Rate, message  } from "antd";
 import Description from "../../ui/Description";
 import { useDriver } from "../../store/driver";
+import MapForDriver from '../../components/MapForDriver'
 
 function DriverProfile() {
   const { user } = useUserAuth((state) => ({ user:state.user }));
@@ -101,6 +102,7 @@ function DriverProfile() {
           </div>
         </div>
       </Form>
+      <MapForDriver/>
     </div>
   );
 }
