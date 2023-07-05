@@ -2,39 +2,53 @@ import { Button, ConfigProvider, DatePicker, Form, Input, message } from "antd";
 import { useOrder } from "../store/order";
 import { useUserAuth } from "../store/userAuth";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Map from '../components/Map'
+import { usePlace } from "../store/place";
+
+
 
 const { RangePicker } = DatePicker;
 
 function ShipperForm({ handleClose }) {
+  const [form] = Form.useForm()
   const user = useUserAuth(state=>state.user)
   const postNewOrder= useOrder((state) =>state.postNewOrder);
   const [messageApi, contextHolder] = message.useMessage();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { places, startAndEndAddressName } = usePlace(state=>({places:state.places,startAndEndAddressName:state.startAndEndAddressName}))
 
   const onFinish = async (values) => {
-    values.weight = +values.weight;
-    values.volume = +values.volume;
-    values.startDate = dayjs(values.dates[0]).valueOf() / 1000;
-    values.endDate = dayjs(values.dates[1]).valueOf() / 1000;
+    // values.weight = +values.weight;
+    // values.volume = +values.volume;
+    // values.startDate = dayjs(values.dates[0]).valueOf() / 1000;
+    // values.endDate = dayjs(values.dates[1]).valueOf() / 1000;
 
-    setLoading(true);
-    try {
-      await postNewOrder(values, user.accessToken)
-      messageApi.open({
-        type: 'success',
-        content: 'Order successfully created',
-      });
-      handleClose();
-    } catch (error) {
-      setError(error.response.data.message);
-    }
-    setLoading(false);
+    // setLoading(true);
+    // try {
+    //   await postNewOrder(values, user.accessToken)
+    //   messageApi.open({
+    //     type: 'success',
+    //     content: 'Order successfully created',
+    //   });
+    //   handleClose();
+    // } catch (error) {
+    //   setError(error.response.data.message);
+    // }
+    // setLoading(false);
+  
   };
+  useEffect(() => {
+    form.setFieldsValue({
+      startLocation:startAndEndAddressName.start,
+      endLocation:startAndEndAddressName.end
+    })  ;
+  }, [startAndEndAddressName]);
 
   return (
-    <div className="">
+    <div className="flex gap-3 lg:flex-row flex-col items-center">
+    <div >
       {contextHolder}
 
       <ConfigProvider
@@ -47,6 +61,7 @@ function ShipperForm({ handleClose }) {
         <Form
           name="basic"
           size="large"
+          form={form}
           onFinish={onFinish}
           autoComplete="off"
           disabled={loading}
@@ -64,9 +79,9 @@ function ShipperForm({ handleClose }) {
               },
             ]}
           >
-            <Input placeholder="Start location" />
+             <Input placeholder="Start location" />
           </Form.Item>
-
+         
           <Form.Item
             name="endLocation"
             rules={[
@@ -131,6 +146,8 @@ function ShipperForm({ handleClose }) {
           </Form.Item>
         </Form>
       </ConfigProvider>
+    </div>
+    <Map/>
     </div>
   );
 }

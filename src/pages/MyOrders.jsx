@@ -39,7 +39,7 @@ function MyOrders() {
       <Modal
         open={modalIOpen}
         onCancel={() => setModalIsOpen(false)}
-        width={400}
+        width={800}
         footer={false}
         closable={false}
         centered

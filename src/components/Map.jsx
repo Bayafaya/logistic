@@ -8,6 +8,7 @@ import {
 } from "@react-google-maps/api";
 import { Button, Input } from "antd";
 import { EnvironmentFilled, ClearOutlined } from "@ant-design/icons";
+import { usePlace } from "../store/place";
 const libraries = ["places"];
 function Map() {
   const center = { lat: 44, lng: -80 };
@@ -19,7 +20,20 @@ function Map() {
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [pickedPlace,setPickedPlace] = useState([])
+
+  const { 
+    places, 
+    setPlaces, 
+    startAndEndAddressName,
+    setEndAddress,
+    setStartAddress
+  } = usePlace(state=>({
+    places:state.places,
+    setPlaces:state.setPlaces,
+    startAndEndAddressName:state.startAndEndAddressName,
+    setEndAddress:state.setEndAddress,
+    setStartAddress:state.setStartAddress
+  }))
   /**@type React.MutableRefObject.<HTMLInputElement>*/
   const originRef = useRef();
   /**@type React.MutableRefObject.<HTMLInputElement>*/
@@ -48,37 +62,39 @@ function Map() {
   };
 useEffect(()=>{
   checkDirection()
-
-},[pickedPlace])
+},[places])
 
 const checkDirection = async()=>{
-const get = [...pickedPlace]
+const get = [...places]
 
-if(pickedPlace.length > 2 ){
+if(places.length > 2 ){
   get.shift()
   get.pop()
-  console.log(get);
+
 }
-  if(pickedPlace.length > 1){
+  if(places.length > 1){
   const directionService = new google.maps.DirectionsService();
   const result = await directionService.route({
-    origin: pickedPlace[0],
-    destination: pickedPlace[pickedPlace.length - 1],
+    origin: places[0],
+    destination: places[places.length - 1],
     travelMode: google.maps.TravelMode.DRIVING,
-    waypoints: pickedPlace.length > 2 ? get.map(item=>({location:item})) : [],
+    // waypoints: places.length > 2 ? get.map(item=>({location:item})) : [],
   });
+  const geocoder = new google.maps.Geocoder();
+   await  geocoder.geocode({ location: result.request.origin.location }).then(({results})=>setStartAddress(results[0].formatted_address))
+   await geocoder.geocode({ location: result.request.destination.location }).then(({results})=>setEndAddress(results[0].formatted_address))
   setDirectionsResponse(result);
  }
 }
 
   const handLeClick = (ev)=>{
-    setPickedPlace([...pickedPlace, new google.maps.LatLng(ev.latLng.lat(),ev.latLng.lng())])
+    setPlaces(new google.maps.LatLng(ev.latLng.lat(),ev.latLng.lng()))
   }
 
   if (!isLoaded) return <div>loading</div>;
   return (
     <>
-      <div className="fixed w-screen top-6 z-10 flex justify-center items-center">
+      {/* <div className="fixed w-screen top-6 z-10 flex justify-center items-center">
         <div className="bg-white space-y-3 w-[420px] rounded p-6">
           <div className="flex gap-3 items-center">
             <Autocomplete>
@@ -117,11 +133,11 @@ if(pickedPlace.length > 2 ){
             <span>duration: {duration}</span>
           </div>
         </div>
-      </div>
+      </div> */}
       <GoogleMap
         zoom={10}
         center={center}
-        mapContainerClassName="h-screen w-screen"
+        mapContainerClassName="h-[400px] w-[400px] lg:h-[400px] lg:w-[600px]"
         options={{
           zoomControl: false,
           streetViewControl: false,

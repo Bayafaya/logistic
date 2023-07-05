@@ -3,13 +3,12 @@ import { Layout, Menu, theme } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router";
 import SignupPage from "./pages/SignupPage.jsx";
-import ProfilePage from "./pages/Profile/ProfilePage.jsx";
 import MyOrders from "./pages/MyOrders.jsx";
 import AllOrders from "./pages/AllOrders.jsx";
 import SigninPage from "./pages/SignInPage.jsx";
-import Map from "./pages/map/Map.jsx";
 import { useUserAuth } from "./store/userAuth.js";
 import DriverProfile from "./pages/DriverProfile/DriverProfile.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
 
 
 const SHIPPER_PAGES = [
@@ -29,11 +28,6 @@ const SHIPPER_PAGES = [
     label: "All orders",
   },
   {
-    key: "/map",
-    icon: React.createElement(AppstoreOutlined),
-    label: "Map",
-  },
-  {
     key: "logOut",
     icon: React.createElement(AppstoreOutlined),
     label: "Log out",
@@ -49,11 +43,6 @@ const DRIVER_PAGES = [
     key: "/all-orders",
     icon: React.createElement(AppstoreOutlined),
     label: "All orders",
-  },
-  {
-    key: "/map",
-    icon: React.createElement(AppstoreOutlined),
-    label: "Map",
   },
   {
     key: "logOut",
@@ -150,7 +139,6 @@ const App = () => {
     <Routes>
       <Route path="/signup" element={<SignupPage/>} />
       <Route path="/signin" element={<SigninPage />} />
-      <Route path="/map" element={<Map />} />
       <Route path="/*" element={<AppLayout />} />
     </Routes>
   );

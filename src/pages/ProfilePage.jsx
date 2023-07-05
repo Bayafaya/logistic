@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { UserOutlined,EditFilled,CheckOutlined } from "@ant-design/icons";
-import { useUserAuth } from "../../store/userAuth";
+import { useUserAuth } from "../store/userAuth";
 import { Avatar, Button, Input, Select, Form,Rate  } from "antd";
-import Description from "../../ui/Description";
+import Description from "../ui/Description";
 
 const {Option} = Select;
-function ProfileTab() {
+function ProfilePage() {
   const [disabledToEdit, setDisabledToEdit] = useState(true);
   const {user,setUser} = useUserAuth((state) => ({user:state.user,setUser:state.setUser}));
   const [form] = Form.useForm();
@@ -219,4 +219,4 @@ function ProfileTab() {
   );
 }
 
-export default ProfileTab;
+export default ProfilePage;
