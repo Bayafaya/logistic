@@ -1,34 +1,36 @@
-import React from 'react'
-import { useState } from "react";
 import {
   Button,
   ConfigProvider,
   Form,
   Input,
   Divider,
+  message,
 } from "antd";
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { useUserAuth }  from "../store/userAuth.js";
 
-
-
 function SigninPage() {
-    const [role, setRole] = useState("Shipper");
-    const {setUser,signIn} = useUserAuth(state=>({setUser:state.setUser,signIn:state.signIn}))
+    const {signIn} = useUserAuth(state=>({setUser:state.setUser,signIn:state.signIn}))
     const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
 
-    const onFinish = async (values) => {
-      await signIn(values);
-      navigate("/");
-    };
-
-    const onFinishFailed = (errorInfo) => {
-      console.log("Failed:", errorInfo);
+    const onFinish = async(values) => {
+      try {
+        await signIn(values);
+        navigate("/");
+      } catch (error) {
+        messageApi.open({
+          type: 'error',
+          content: error.response.data.message,
+        });
+      }
     };
 
   return (
     <div className="h-screen w-screen grid place-items-center">
+      {contextHolder}
+
       <ConfigProvider
         theme={{
           token: {
@@ -40,19 +42,12 @@ function SigninPage() {
           name="basic"
           className="border rounded-lg shadow-xl absolute w-full h-full sm:h-auto sm:w-[480px] pt-10 pb-6 px-6"
           size="large"
-          initialValues={{
-            // remember: true,
-            prefix: "+996",
-          }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <h1 className="text-center text-3xl text-primary mb-10 ">
-            &lt; Logo Here &frasl; &gt;{" "}
+            CargoCode
           </h1>
-
-        
 
           <Form.Item
             name="email"
@@ -62,7 +57,7 @@ function SigninPage() {
                 message: "The input is not valid E-mail!",
               },
               {
-                // required: true,
+                required: true,
                 message: "Please input your E-mail!",
               },
             ]}
@@ -75,7 +70,7 @@ function SigninPage() {
             name="password"
             rules={[
               {
-                // required: true,
+                required: true,
                 min: 3,
                 message: "Please create your password longer!",
               },
@@ -93,7 +88,7 @@ function SigninPage() {
               className="bg-primary"
               htmlType="submit"
             >
-              Sign In
+              Sign in
             </Button>
           </Form.Item>
           <Divider className='my-0' plain>or</Divider>
@@ -102,7 +97,7 @@ function SigninPage() {
               type="link"
               block
             >
-              Sign Up
+              Sign up
             </Button>
             </Link>
         </Form>

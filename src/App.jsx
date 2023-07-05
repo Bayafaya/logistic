@@ -1,6 +1,6 @@
 import { AppstoreOutlined, UserOutlined } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router";
 import SignupPage from "./pages/SignupPage.jsx";
 import ProfilePage from "./pages/Profile/ProfilePage.jsx";
@@ -9,11 +9,12 @@ import AllOrders from "./pages/AllOrders.jsx";
 import SigninPage from "./pages/SignInPage.jsx";
 import Map from "./pages/map/Map.jsx";
 import { useUserAuth } from "./store/userAuth.js";
+import DriverProfile from "./pages/DriverProfile/DriverProfile.jsx";
 
 
-const PAGES = [
+const SHIPPER_PAGES = [
   {
-    key: "/profile",
+    key: "/shipper-profile",
     icon: React.createElement(UserOutlined),
     label: "Profile",
   },
@@ -21,6 +22,28 @@ const PAGES = [
     key: "/my-orders",
     icon: React.createElement(AppstoreOutlined),
     label: "My orders",
+  },
+  {
+    key: "/all-orders",
+    icon: React.createElement(AppstoreOutlined),
+    label: "All orders",
+  },
+  {
+    key: "/map",
+    icon: React.createElement(AppstoreOutlined),
+    label: "Map",
+  },
+  {
+    key: "logOut",
+    icon: React.createElement(AppstoreOutlined),
+    label: "Log out",
+  },
+];
+const DRIVER_PAGES = [
+  {
+    key: "/driver-profile",
+    icon: React.createElement(UserOutlined),
+    label: "Profile",
   },
   {
     key: "/all-orders",
@@ -50,6 +73,7 @@ const AppLayout = () => {
 
   const [currentPage, setCurrentPage] = useState("");
 
+  const pages = useMemo(() => user.role === 'driver' ? DRIVER_PAGES : SHIPPER_PAGES, [user]);
 
   useEffect(() => {
     setCurrentPage(location.pathname);
@@ -57,7 +81,11 @@ const AppLayout = () => {
 
   useEffect(()=>{
     if(user.accessToken){
-      navigate('/profile')
+      if (user.role === 'driver') {
+        navigate('/driver-profile')
+      } else {
+        navigate('/shipper-profile')
+      }
     }else{
       navigate('/signin')
     }
@@ -88,7 +116,7 @@ const AppLayout = () => {
           theme="dark"
           mode="inline"
           selectedKeys={[currentPage]}
-          items={PAGES}
+          items={pages}
           onSelect={handleMenuSelect}
         />
       </Sider>
@@ -106,7 +134,8 @@ const AppLayout = () => {
           }}
         >
           <Routes>
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/shipper-profile" element={<ProfilePage />} />
+            <Route path="/driver-profile" element={<DriverProfile />} />
             <Route path="/my-orders" element={<MyOrders />} /> 
             <Route path="/all-orders" element={<AllOrders />} />
           </Routes>

@@ -1,31 +1,39 @@
 import {  FloatButton, Modal } from "antd";
 import { useOrder } from "../store/order.js";
 import OrderCard from "../components/OrderCard.jsx";
-import { useNavigate } from "react-router";
 import { PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import ShipperForm from "../components/ShipperForm.jsx";
+import { useUserAuth } from "../store/userAuth.js";
 
 function MyOrders() {
-  const navigate = useNavigate();
   const [modalIOpen, setModalIsOpen] = useState(false);
-  const {orders,fetchOrders} = useOrder((state) =>({orders:state.orders,fetchOrders:state.fetchOrders}));
+  const user = useUserAuth(state=>state.user)
+  const { orders, recomendations, fetchOrders, getRecomendations } = useOrder((state) =>({
+    orders: state.orders,
+    recomendations: state.recomendations,
+    fetchOrders: state.fetchOrders,
+    getRecomendations: state.getRecomendations,
+  }));
 
   const handleAddClick = () => {
     setModalIsOpen(true);
   };
+
   const handleClose =()=>{
     setModalIsOpen(false)
   }
+
   useEffect(()=>{
-    fetchOrders()
-  },[])
+    fetchOrders({ author: user._id });
+    getRecomendations();
+  }, [])
 
   return (
     <div>
       <div>
         {orders.map((order) => (
-          <OrderCard key={order.id} order={order} />
+          <OrderCard key={order._id} order={order} driver={recomendations.find((recomendation) => recomendation._id === order._id)} />
         ))}
       </div>
       <Modal

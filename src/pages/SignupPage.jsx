@@ -1,47 +1,38 @@
 import { useState } from "react";
 import {
   Button,
-  Checkbox,
   ConfigProvider,
+  Divider,
   Form,
   Input,
-  Select,
   Segmented,
-  Upload,
+  message,
 } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth }  from "../store/userAuth.js";
-import axios from "axios";
-const { Option } = Select;
 
 function SignupPage() {
   const [role, setRole] = useState("shipper");
-  const {setUser,signUp} = useUserAuth(state=>({setUser:state.setUser,signUp:state.signUp}))
+  const {signUp} = useUserAuth(state=>({setUser:state.setUser,signUp:state.signUp}))
   const navigate = useNavigate();
-  const onFinish = async(values) => {
-    await signUp({...values, role})
-    navigate("/");
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        style={{
-          width: 90,
-        }}
-      >
-        <Option value="+996">+996</Option>
-        <Option value="+7">+7</Option>
-      </Select>
-    </Form.Item>
-  );
+  const [messageApi, contextHolder] = message.useMessage();
 
+  const onFinish = async(values) => {
+    try {
+      await signUp({...values, role})
+      navigate("/");
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: error.response.data.message,
+      });
+    }
+  };
 
   return (
     <div className="h-screen w-screen grid place-items-center">
+      {contextHolder}
+
       <ConfigProvider
         theme={{
           token: {
@@ -53,42 +44,25 @@ function SignupPage() {
           name="basic"
           className="border rounded-lg shadow-xl absolute w-full h-full sm:h-auto sm:w-[480px] pt-10 pb-6 px-6"
           size="large"
-          initialValues={{
-            // remember: true,
-            prefix: "+996",
-          }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <h1 className="text-center text-3xl text-primary mb-10 ">
-            &lt; Logo Here &frasl; &gt;{" "}
+            CargoCode
           </h1>
 
           <div className="mb-3">
             <Segmented
               value={role}
               onChange={(value) => setRole(value)}
-              options={[{value:"shipper",label:'Shipper'},{value:"cargoCompany",label:'Cargo Company'}, {value:"driver",label:'Driver'}]}
+              options={[{value:"shipper",label:'Shipper'}, {value:"driver",label:'Driver'}]}
               block
             />
-            <span className="text-secondary text-sm">
-              Please input your role
-            </span>
+            <p className="text-center mt-3 text-secondary text-sm">
+              Choose your role
+            </p>
           </div>
 
-          <Form.Item
-            name="nameSurname"
-            rules={[
-              {
-                // required: true,
-                min: 3,
-                message: "Please input your First and Last name!",
-              },
-            ]}
-          >
-            <Input placeholder="Please input your First and Last name" />
-          </Form.Item>
 
           <Form.Item
             name="email"
@@ -98,7 +72,7 @@ function SignupPage() {
                 message: "The input is not valid E-mail!",
               },
               {
-                // required: true,
+                required: true,
                 message: "Please input your E-mail!",
               },
             ]}
@@ -107,98 +81,16 @@ function SignupPage() {
           </Form.Item>
 
           <Form.Item
-            name="phone"
-            rules={[
-              {
-                // required: true,
-                message: "Please input your phone number!",
-              },
-            ]}
-          >
-            <Input addonBefore={prefixSelector} />
-          </Form.Item>
-
-          <Form.Item
-            name="nameOfCompany"
-            rules={[
-              {
-                // required: true,
-                min: 3,
-                message: "Please input company name!",
-              },
-            ]}
-          >
-            <Input placeholder="Please input company name" />
-          </Form.Item>
-
-          <Form.Item
-            name="mcDotId"
-            rules={[
-              {
-                // required: true,
-                min: 3,
-                message: "Please input MC/DOT personal number!",
-              },
-            ]}
-          >
-            <Input placeholder="Please input MC/DOT personal number" />
-          </Form.Item>
-
-          <Form.Item
-            name="upload"
-            rules={[
-              {
-                // required: true,
-                message: "Please input MC/DOT personal number!",
-              },
-            ]}
-            valuePropName="fileList"
-            extra={
-              <span className="text-secondary text-sm">
-                Please input all necessary documents
-              </span>
-            }
-            accept="image/png, image/gif, image/jpeg, image/svg+xml"
-          >
-            <Upload
-              multiple
-              maxCount={6}
-              name="logo"
-              action="/upload.do"
-              listType="picture"
-            >
-              <Button icon={<UploadOutlined />}>Click to upload</Button>
-            </Upload>
-          </Form.Item>
-
-          <Form.Item
-            name="username"
-            rules={[
-              {
-                // required: true,
-                min: 3,
-                message: "Please create your username longer!",
-              },
-            ]}
-          >
-            <Input placeholder="Please create your username" />
-          </Form.Item>
-
-          <Form.Item
             name="password"
             rules={[
               {
-                // required: true,
-                min: 3,
+                required: true,
+                min: 8,
                 message: "Please create your password longer!",
               },
             ]}
           >
             <Input.Password placeholder="Please create your password" />
-          </Form.Item>
-
-          <Form.Item name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
           </Form.Item>
 
           <Form.Item>
@@ -208,9 +100,19 @@ function SignupPage() {
               className="bg-primary"
               htmlType="submit"
             >
-              Submit
+              Sign up
             </Button>
           </Form.Item>
+
+          <Divider className='my-0' plain>or</Divider>
+          <Link to='/signin'>
+          <Button
+              type="link"
+              block
+            >
+              Sign in
+            </Button>
+            </Link>
         </Form>
       </ConfigProvider>
     </div>

@@ -1,18 +1,42 @@
-import { Button, ConfigProvider, Form, Input } from "antd";
+import { Button, ConfigProvider, DatePicker, Form, Input, message } from "antd";
 import { useOrder } from "../store/order";
 import { useUserAuth } from "../store/userAuth";
+import dayjs from "dayjs";
+import { useState } from "react";
 
+const { RangePicker } = DatePicker;
 
 function ShipperForm({ handleClose }) {
   const user = useUserAuth(state=>state.user)
   const postNewOrder= useOrder((state) =>state.postNewOrder);
+  const [messageApi, contextHolder] = message.useMessage();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
-    await postNewOrder(values, user.accessToken)
+    values.weight = +values.weight;
+    values.volume = +values.volume;
+    values.startDate = dayjs(values.dates[0]).valueOf() / 1000;
+    values.endDate = dayjs(values.dates[1]).valueOf() / 1000;
+
+    setLoading(true);
+    try {
+      await postNewOrder(values, user.accessToken)
+      messageApi.open({
+        type: 'success',
+        content: 'Order successfully created',
+      });
+      handleClose();
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+    setLoading(false);
   };
 
   return (
     <div className="">
+      {contextHolder}
+
       <ConfigProvider
         theme={{
           token: {
@@ -20,33 +44,51 @@ function ShipperForm({ handleClose }) {
           },
         }}
       >
-        <Form name="basic" size="large" onFinish={onFinish} autoComplete="off">
-          <h1 className="text-center text-3xl text-primary mb-10 ">
-            &lt; Logo Here &frasl; &gt;{" "}
+        <Form
+          name="basic"
+          size="large"
+          onFinish={onFinish}
+          autoComplete="off"
+          disabled={loading}
+        >
+          <h1 className="text-center text-2xl mb-10 ">
+            Create order
           </h1>
 
           <Form.Item
-            name="from"
+            name="startLocation"
             rules={[
               {
                 required: true,
-                message: "From must be exist",
+                message: "Start location must be exist",
               },
             ]}
           >
-            <Input placeholder="From" />
+            <Input placeholder="Start location" />
           </Form.Item>
 
           <Form.Item
-            name="to"
+            name="endLocation"
             rules={[
               {
                 required: true,
-                message: "To must be exist",
+                message: "End location must be exist",
               },
             ]}
           >
-            <Input placeholder="To" />
+            <Input placeholder="End location" />
+          </Form.Item>
+
+          <Form.Item
+            name="dates"
+            rules={[
+              {
+                required: true,
+                message: "Dates must be exist",
+              },
+            ]}
+          >
+            <RangePicker showTime />
           </Form.Item>
 
           <Form.Item
@@ -58,8 +100,24 @@ function ShipperForm({ handleClose }) {
               },
             ]}
           >
-            <Input placeholder="Weight" />
+            <Input type="number" placeholder="Weight" />
           </Form.Item>
+
+          <Form.Item
+            name="volume"
+            rules={[
+              {
+                required: true,
+                message: "Volume must be exist",
+              },
+            ]}
+          >
+            <Input type="number" placeholder="Volume" />
+          </Form.Item>
+
+          <p className="text-center mb-5" style={{ color: 'red' }}>
+            {error}
+          </p>
 
           <Form.Item>
             <Button
