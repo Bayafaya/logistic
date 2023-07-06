@@ -44,16 +44,16 @@ export const useOrder = create((set) => ({
     set({ recomendations: response.data })
   },
   sendOffer: async(data, token)=>{
-    return axios.post(`http://localhost:3000/order/send-offer`, data, {
+    return axios.post(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/order/send-offer`, data, {
       headers: {
         'Authorization': `Bearer ${token}`
       },
     })
   },
   cancelOffer: async(data)=>{
-    return axios.post(`http://localhost:3000/order/cancel-offer`, data)
+    return axios.post(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/order/cancel-offer`, data)
   },
   acceptOffer: async(data)=>{
-    return axios.post(`http://localhost:3000/order/accept-offer`, data)
+    return axios.post(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/order/accept-offer`, data)
   },
 }))

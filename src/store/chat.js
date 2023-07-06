@@ -4,7 +4,7 @@ import { create } from 'zustand'
 export const useChat = create((set) => ({
   token: '',
   getToken: async(token)=>{
-    const response = await axios.get(`http://localhost:3000/chat/token`, {
+    const response = await axios.get(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/chat/token`, {
       headers: {
         'authorization': `Bearer ${token}`
       }
@@ -13,6 +13,6 @@ export const useChat = create((set) => ({
     return response.data;
   },
   addUsers: async(data)=>{
-    return axios.post(`http://localhost:3000/chat/add/user`,data)
+    return axios.post(`https://us-central1-test-c36b4.cloudfunctions.net/myFunction/chat/add/user`,data)
   },
 }))
