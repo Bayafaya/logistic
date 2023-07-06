@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
     "@react-google-maps/api": "^2.18.1",
+    "@twilio/conversations": "^2.4.1",
     "antd": "^5.6.3",
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",

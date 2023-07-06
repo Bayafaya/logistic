@@ -1,7 +1,7 @@
 import { Card } from "antd"
 import dayjs from "dayjs";
 
-function OrderCard({ order, driver }) {
+function OrderCard({ order, driver, onOpenChat }) {
   const getDate = (timestamp) => {
     const date = dayjs(timestamp * 1000);
     return date.format('YYYY-MM-DD HH:mm');
@@ -26,7 +26,16 @@ function OrderCard({ order, driver }) {
 
         {driver ? (
           <div>
-            <p className="text-center"><strong>This driver can take your order</strong></p>
+            <p className="text-center">
+              <strong>This driver can take your order. </strong>
+              <span
+                className="text-primary"
+                style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                onClick={() => onOpenChat({ order, driver: driver.driver })}
+              >
+                Contact driver
+              </span>
+            </p>
             <p><strong>Current location:</strong> {driver.driver.currentLocation}</p>
             <p><strong>Arrival duration:</strong> {driver.driver.durationToOrder.text}</p>
             <p><strong>Truck capacity:</strong> {driver.driver.truckCapacity}</p>
