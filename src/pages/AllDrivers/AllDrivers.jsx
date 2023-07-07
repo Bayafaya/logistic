@@ -16,11 +16,21 @@ function AllDrivers() {
     <div>
       {drivers.map((driver) => (
         <Card key={driver._id} className="mb-5" bordered={true}>
-          <p><strong>Entry point:</strong> {driver.currentLocation}</p>
+          <div className="flex justify-between">
+            <div>
+              <p><strong>Entry point:</strong> {driver.currentLocation}</p>
 
-          <p><strong>Truck capacity:</strong> {driver.truckCapacity}</p>
+              <p><strong>Truck capacity:</strong> {driver.truckCapacity}</p>
 
-          <p><strong>Truck volume:</strong> {driver.truckVolume}</p>
+              <p><strong>Truck volume:</strong> {driver.truckVolume}</p>
+            </div>
+            <span
+              className="text-primary"
+              style={{ cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              Contact driver
+            </span>
+          </div>
         </Card>
       ))}
     </div>

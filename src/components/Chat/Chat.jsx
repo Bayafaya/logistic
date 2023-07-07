@@ -1,7 +1,8 @@
-import { Button, Divider, Form, Input } from "antd";
+import { Button, Divider, Form, Input, Space, Upload } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useUserAuth } from "../../store/userAuth";
 import { useOrder } from "../../store/order";
+import { PaperClipOutlined, SearchOutlined, SettingOutlined, UploadOutlined } from "@ant-design/icons";
 
 function Chat({ chatProps }) {
   const { user } = useUserAuth(state=> ({ user: state.user }))
@@ -157,11 +158,20 @@ function Chat({ chatProps }) {
         ))}
       </div>
 
-      <Form form={form} onFinish={onFinish} size="large">
-        <Form.Item name="text">
-          <Input placeholder="Type a message" />
-        </Form.Item>
-      </Form>
+      <div className="flex">
+        <div style={{ width: '95%' }}>
+          <Form form={form} onFinish={onFinish} size="large">
+            <Form.Item name="text">
+              <Input placeholder="Type a message" />
+            </Form.Item>
+          </Form>
+        </div>
+        <div style={{ width: '5%' }}>
+          <Upload>
+              <Button type="primary" ghost shape="circle" icon={<PaperClipOutlined />} />
+          </Upload>
+        </div>
+      </div>
     </div>
   );
 }
